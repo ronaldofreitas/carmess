@@ -1,0 +1,40 @@
+<ion-view view-title="Register">
+  <ion-content class="padding-top">
+    <div class="text-center padding-top">
+      <i class="icon ion-android-person-add larger positive"></i>
+    </div>
+    <form name="registerForm" novalidate ng-submit="registerForm.$valid && register(user)"
+    ng-class="{ 'has-error' : registerForm.txtemail.$invalid && registerForm.$submitted }">
+    <div class="list">
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Email</span>
+        <input name="txtemail" type="email" ng-model="user.email" placeholder="Email"
+        ng-minlength="5"
+        ng-maxlength="30"
+        required>
+      </label>
+      <div class="form-errors" ng-messages="registerForm.txtemail.$error" ng-if="registerForm.$submitted">
+        <div class="form-error" ng-message="required">Preencha um email para usar no cadastro.</div>
+        <div class="form-error" ng-message="email">Utilize um email correto.</div>
+        <div class="form-error" ng-message="maxlength">Maior do que o permitido.</div>
+      </div>
+        <label class="item item-input item-floating-label" ng-class="{ 'has-error-lr' : registerForm.txtpassword.$invalid  && registerForm.$submitted}">
+        <span class="input-label">Senha</span>
+        <input name="txtpassword" type="password" ng-model="user.password" placeholder="Senha"
+        ng-minlength="5"
+        ng-maxlength="25"
+        required>
+      </label>
+      <div class="form-errors" ng-messages="registerForm.txtpassword.$error" ng-if="registerForm.$submitted">
+        <div class="form-error" ng-message="required">Preencha sua senha.</div>
+        <div class="form-error" ng-message="minlength">Sua sennha está muito curta.</div>
+        <div class="form-error" ng-message="maxlength">Sua senha está muito longa.</div>
+        <div class="form-error" ng-message="pattern">Padrão de senha alfa-numérico.</div>
+      </div>
+    </div>
+    <div class="padding-top">
+      <input type="submit" value="Register" class="button button-block button-positive"/>
+    </div>
+  </form>
+  </ion-content>
+</ion-view>

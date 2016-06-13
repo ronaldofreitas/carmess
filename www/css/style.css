@@ -1,0 +1,85 @@
+/* Empty. Add your own CSS if you like */
+
+.larger {
+    font-size: 120px;
+}
+
+.medium {
+    font-size: 30px;
+}
+
+
+/** Error Messages **/
+
+/** Styling for the username field **/
+label.item.has-error {
+  border-bottom: 2px solid red;
+}
+
+/** Styling for the password field when an error exists**/
+label.item.has-error-lr {
+  border-bottom: 2px solid red;
+}
+
+/** Styling for the password field when an error has been resolved**/
+label.item.valid-lr {
+  border-left: 2px solid green;
+  border-right: 2px solid green;
+}
+
+/** Styling for the error text and container **/
+.form-errors {
+  margin: 5px 0
+}
+.form-error {
+  padding: 2px 0 2px 16px;
+  color: red;
+}
+
+.sombracl{
+	-webkit-box-shadow: -5px 2px 11px -4px rgba(0,0,0,0.75);
+-moz-box-shadow: -5px 2px 11px -4px rgba(0,0,0,0.75);
+box-shadow: -20px 20px 50px 5px rgba(0,0,0,0.75);
+z-index: 1000;
+}
+.bar.bar-positive{
+	background-color: #335692;
+}
+.menu-left {
+   /* position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 0;
+    overflow: hidden;
+    min-height: 100%;
+    max-height: 100%;
+    width: 275px;*/
+    background-color: #335692;
+}
+.corpadraofundo{
+	background-color: #335692;
+}
+.corpadraotexto{
+	color:  #335692;
+}
+.menscenter{
+
+}
+
+.item-complex .item-content, .item-radio .item-content {
+   background-color: #335692;
+   color: white;
+}
+
+.item-complex .item-content, .item-radio .item-content {
+border: 0px;
+    padding: 47px 49px 16px 16px;
+
+}
+.button.button-positive{
+	background-color: #335692;
+	border: 0px;
+}
+.item{
+	border: 0px;
+}
