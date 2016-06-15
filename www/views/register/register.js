@@ -1,5 +1,5 @@
 angular.module('App')
-.controller('registerController', function ($scope, $state,$location,$window,$http, Utils) {
+.controller('registerController', function ($scope, $rootScope,$state,$location,$window,$http, Utils) {
 //.controller('registerController', function ($scope) {
 
 
@@ -42,8 +42,8 @@ angular.module('App')
           $window.localStorage['avatar'] = avatarper;
           $window.localStorage['email'] = user.email;
           $window.localStorage['id'] = data.btns.ret;
-
-          $location.path('/home');
+          $rootScope.iduser = data.btns.ret;
+          $location.path('/app/home2/'+data.btns.ret);
 
         }
 

@@ -11,7 +11,7 @@ $stateProvider
   })
 
   .state('app.home2', {
-    url: '/home2',
+    url: '/home2/:id',
     views: {
       'menuContent': {
         templateUrl: 'views/home.html'
