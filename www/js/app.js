@@ -10,19 +10,27 @@ $stateProvider
     controller: 'AppCtrl'
   })
 
-  .state('app.search', {
-    url: '/search',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/search.html'
-      }
-    }
-  })  
   .state('app.home2', {
     url: '/home2',
     views: {
       'menuContent': {
-        templateUrl: 'views/home/home.html'
+        templateUrl: 'views/home.html'
+      }
+    }
+  })  
+  .state('app.perfil', {
+    url: '/perfil',
+    views: {
+      'menuContent': {
+        templateUrl: 'views/perfil.html'
+      }
+    }
+  })  
+  .state('app.sobre', {
+    url: '/sobre',
+    views: {
+      'menuContent': {
+        templateUrl: 'views/sobre.html'
       }
     }
   })
