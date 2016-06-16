@@ -1,18 +1,27 @@
 
 angular.module('App')
 //.controller('homeController', function ($scope, $state,$cordovaOauth, $localStorage, $location,$http,$ionicPopup, $firebaseObject, Auth, FURL, Utils) {
-.controller('homeController', function ($scope,$location,$ionicSideMenuDelegate) {
+.controller('homeController', function ($scope,$location,$state,Scopes,$ionicSideMenuDelegate) {
   //var ref = new Firebase(FURL);
 
   $scope.toggleLeft = function() {
     $ionicSideMenuDelegate.toggleLeft();
   };
-
-  $scope.logOut = function () {
-      //Auth.logout();
-      //firebase.unauth();
-      $location.path("/login");
-  }
+  $scope.dados={}
+  $scope.disp='none'
+  $scope.enviadados = function(){
+    if(typeof $scope.dados.input1 == 'undefined'){
+       $scope.disp='block' 
+    }else{
+      if($scope.dados.input1.length != 7){
+        $scope.disp='block'
+      }else{
+        $scope.disp='none'
+        Scopes.store('HomeCont', $scope.dados);
+        $state.go("app.lista");
+      }
+    }
+  } 
 
 }
 )

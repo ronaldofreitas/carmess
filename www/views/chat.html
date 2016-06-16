@@ -1,0 +1,45 @@
+<ion-view hide-back-button="false" title='Sandero vermelho' style="bakcground-color:#f70;">
+
+<ion-nav-bar class="bar-positive">
+  <ion-nav-back-button class="button-clear">
+    <i class="ion-arrow-left-c"></i>
+  </ion-nav-back-button>
+</ion-nav-bar>
+
+<ion-content>
+
+
+   <div scroll-item ng-repeat="message in messages" >  
+
+    <div class="commentArea" >
+
+      <div class="bubbledRight">
+          {{message.texto}}
+      </div>
+
+      <div class="bubbledLeft">
+      <span>{{nomeusuario}}</span><br/>
+         {{message.texto}}
+      </div>
+
+    </div>    
+
+
+    </div>
+ 
+</ion-content>
+
+
+
+
+<ion-footer-bar keyboard-attach class="bar-stable item-input-inset">
+  <label class="item-input-wrapper">
+    <input type="text" placeholder="Envie sua mensagem" on-return="sendMessage(); closeKeyboard()" class="inputchat" ng-model="data.message" />
+   </label>
+  <button class="button" ng-click="sendMessage()">
+    Enviar
+  </button>
+</ion-footer-bar>
+
+
+</ion-view>

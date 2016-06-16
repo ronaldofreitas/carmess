@@ -1,6 +1,6 @@
 
 //angular.module('App', ['ionic','ngStorage', 'ngCordova','firebase','ngMessages'])
-angular.module('App', ['ionic','ngStorage', 'ngCordova','ngMessages'])
+angular.module('App', ['ionic','controllers','services','ngStorage', 'ngCordova','ngMessages'])
 .config(function($stateProvider, $urlRouterProvider) {
 $stateProvider
  .state('app', {
@@ -14,7 +14,8 @@ $stateProvider
     url: '/home2/:id',
     views: {
       'menuContent': {
-        templateUrl: 'views/home.html'
+        templateUrl: 'views/home.html',
+        controller: 'homeController'
       }
     }
   })  
@@ -34,6 +35,28 @@ $stateProvider
       }
     }
   })
+
+
+  .state('app.lista', {
+    url: '/lista',
+    views: {
+      'menuContent': {
+        templateUrl: 'views/lista.html',
+        controller: 'ListaCont'
+      }
+    }
+  })  
+  .state('app.chat', {
+    url: '/chat',
+    views: {
+      'menuContent': {
+        templateUrl: 'views/chat.html',
+        controller: 'ChatCont'
+      }
+    }
+  })
+
+  // ----------------
     .state('login', {
       url: '/login',
       templateUrl: 'views/login/login.html',
@@ -70,5 +93,6 @@ $urlRouterProvider.otherwise("/login");
     }
   });
 })
+
 .controller('AppCtrl', function($scope) {
 })

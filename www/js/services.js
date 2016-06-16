@@ -1,4 +1,4 @@
-angular.module('App')
+angular.module('services', [])
 .factory ('StorageService', function ($localStorage) {
 
 $localStorage = $localStorage.$default({
@@ -22,4 +22,17 @@ return {
     add: _add,
     remove: _remove
   };
+})
+
+.factory('Scopes', function ($rootScope) {
+    var mem = {};
+ 
+    return {
+        store: function (key, value) {
+            mem[key] = value;
+        },
+        get: function () {
+            return mem;
+        }
+    };
 })

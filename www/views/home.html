@@ -1,22 +1,32 @@
-<ion-view view-title="Buscar" hide-back-button="true" ng-controller="homeController">
-  <ion-nav-bar class="bar-positive">
-    <ion-nav-buttons side="left">
-      <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
-    </ion-nav-buttons>
-  </ion-nav-bar>
-
-  <ion-content class="padding-top">
-
-    <div class="list">
-      <label class="item item-input item-stacked-label">
-        <span class="input-label">Placa do carro</span>
-        <input type="text" placeholder="Digite a placa e faça a busca">
-      </label>
+<ion-view view-title="">
+    <ion-nav-bar class="bar-positive">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+    </ion-nav-bar>
+<ion-content has-header="true" padding="true" class="conteudohome">
+    <div class="row row-center">
+      <div class="col col-center">
+        Digite a placa
+      </div>
     </div>
+    <div class="row">
+      <div class="col">
 
-    <button class="button button-block button-positive">
-     Buscar
-    </button>
-
+        <label class="item item-input inputselecut">
+          <input type="text" ng-model="dados.input1" maxlength="7" min="7" max="7" style="text-transform:uppercase;font-size: 24px; text-align: center;" ng-pattern="/[a-zA-Z]/">
+        </label>
+        <div class="alertaerro" style="display:{{disp}}">Digite uma placa válida</div>
+  
+      </div>
+    </div>    
+    <div class="row">
+      <div class="col">
+        <button id="submitnput" ng-click="enviadados()" class="button button-block button-positive">
+          Buscar
+        </button>
+      </div>
+    </div>
   </ion-content>
 </ion-view>
+
