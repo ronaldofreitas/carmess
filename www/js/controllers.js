@@ -21,6 +21,16 @@ angular.module('controllers', [])
 
 })
 
+.controller('perfilCont', function($scope) {
+  var rootRef = firebase.database().ref();  
+  console.log(rootRef)
+var key = rootRef.key;
+var rootRef = rootRef.root;
+var parentRef = rootRef.parent;
+
+
+})
+
 .controller('ChatCont', function($scope,$ionicScrollDelegate) {
   $scope.data={message:''}
 
