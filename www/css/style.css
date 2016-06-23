@@ -8,6 +8,13 @@
     font-size: 30px;
 }
 
+.placasddf{
+  background-color: #ccc;
+  text-align: right;
+}
+.inputperfilset{
+  font-size: 40px;
+}
 
 /** Error Messages **/
 
@@ -178,3 +185,11 @@ border: 0px;
 /* chat */
 
 
+.fotocircular {
+  width: 30px;
+  height: 30px;
+  border-radius: 150px;
+  -webkit-border-radius: 150px;
+  -moz-border-radius: 150px;
+
+  }

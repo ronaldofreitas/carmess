@@ -1,8 +1,11 @@
 angular.module('App')
-.controller('registerController', function ($scope, $rootScope,$state,$location,$window,$http, Utils) {
+.controller('registerController', function ($scope,$state,$ionicHistory,$location,$window,$http, Utils) {
 //.controller('registerController', function ($scope) {
 
 
+  $scope.goBack = function(){
+      $ionicHistory.goBack();
+  }
 
   $scope.register = function(user) {
 
@@ -25,14 +28,17 @@ angular.module('App')
 
         }else{
           Utils.hide();
-          //data.btns.ret
+          
           var avatarper = get_gravatar(user.email, 40);
-          firebase.database().ref('usuarios/'+ data.btns.ret).set({
+          var iduser = data.btns.ret;
+
+          // grava dados do usuario
+          firebase.database().ref('usuarios/'+iduser).set({
             nome : '',
             email : user.email,
             avatar : avatarper,
-            _id : data.btns.ret,
-            veículo: '',
+            _id : parseInt(iduser),
+            modelo: '',
             marca:  '',
             cor:  '',
             placa:  ''
@@ -40,10 +46,16 @@ angular.module('App')
 
           $window.localStorage['nome'] = '';
           $window.localStorage['avatar'] = avatarper;
-          $window.localStorage['email'] = user.email;
-          $window.localStorage['id'] = data.btns.ret;
-          $rootScope.iduser = data.btns.ret;
-          $location.path('/app/home2/'+data.btns.ret);
+          //$window.localStorage['email'] = user.email;
+          $window.localStorage['id'] = iduser;
+          $window.localStorage['nome'] = '';
+          $window.localStorage['marca'] = '';
+          $window.localStorage['modelo'] = '';
+          $window.localStorage['cor'] = '';
+          $window.localStorage['placa1'] = '';
+          $window.localStorage['placa2'] = '';
+
+          $location.path('/app/perfil');
 
         }
 

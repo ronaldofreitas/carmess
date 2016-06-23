@@ -1,8 +1,12 @@
 
 angular.module('App')
 //.controller('homeController', function ($scope, $state,$cordovaOauth, $localStorage, $location,$http,$ionicPopup, $firebaseObject, Auth, FURL, Utils) {
-.controller('homeController', function ($scope,$location,$state,Scopes,$ionicSideMenuDelegate) {
+.controller('homeController', function ($scope,$location,$state,Scopes,$window,$ionicSideMenuDelegate) {
   //var ref = new Firebase(FURL);
+
+
+$scope.profilefoto=$window.localStorage['avatar'];
+
 
   $scope.toggleLeft = function() {
     $ionicSideMenuDelegate.toggleLeft();
@@ -23,8 +27,7 @@ angular.module('App')
     }
   } 
 
-}
-)
+})
 
 .controller("CartController", function($scope) {
   

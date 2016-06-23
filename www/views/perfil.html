@@ -1,13 +1,51 @@
-<ion-view view-title="Home" hide-back-button="true" ng-controller="perfilCont">
+<ion-view view-title="Perfil" hide-back-button="true" ng-controller="perfilCont">
+
     <ion-nav-bar class="bar-positive">
-  <ion-nav-buttons side="left">
-    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
-  </ion-nav-buttons>
+	  <ion-nav-buttons side="left">
+	    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+	  </ion-nav-buttons>
     </ion-nav-bar>
 
-     
-        <ion-content class="padding-top">
-        <dir class="menscenter"></dir>
-          <h1>Perfil</h1>
-        </ion-content>
+    <ion-content class="padding-top">
+		<dir class="menscenter"></dir>
+		<div class="list">
+		
+
+			<label class="item item-input item-stacked-label">
+				<span class="input-label">Seu nome</span>
+				<input style="font-size: 25px;border-bottom: 1px solid #b6bbda;color: #29368c;" type="text" ng-model="perfil.nome" placeholder="Nome ou apelido">
+			</label>
+
+			<label class="item item-input item-stacked-label">
+				<span class="input-label">Marca</span>
+				<input style="font-size: 25px;border-bottom: 1px solid #b6bbda;color: #29368c;" type="text" ng-model="perfil.marca" placeholder="Ford, Fiat, Renault etc...">
+			</label>
+
+			<label class="item item-input item-stacked-label">
+				<span class="input-label">Modelo</span>
+				<input style="font-size: 25px;border-bottom: 1px solid #b6bbda;color: #29368c;" type="text" ng-model="perfil.modelo" placeholder="Fiesta, Palio, Sandero etc...">
+			</label>
+
+			<label class="item item-input item-stacked-label">
+				<span class="input-label">Cor</span>
+				<input style="font-size: 25px;border-bottom: 1px solid #b6bbda;color: #29368c;" type="text" ng-model="perfil.cor" placeholder="Azul, verde, vermelho etc...">
+			</label>
+
+			<label class="item item-input item-stacked-label" >
+				<span class="input-label">Placa</span>
+				<div  style="float: left;">
+				<input class="inputplaca inpal1" ng-keypress="validateCode($event,1)" ng-trim="false" type="text" ng-model="perfil.placa1" maxlength="3" min="3" max="3" style="text-align: right;margin-right: 2%; font-size:25px;width: 49%; float: left;border-bottom: 1px solid #b6bbda;color: #29368c;text-transform:uppercase;" placeholder="ABC">
+				<input class="inputplaca inpal2" ng-keypress="validateCode($event,2)" ng-trim="false" type="text" ng-model="perfil.placa2" maxlength="4" min="4" max="4" style="text-align: left;font-size:25px;width: 49%;float: left; border-bottom: 1px solid #b6bbda;color: #29368c;text-transform:uppercase;" placeholder="1234">
+				</div>
+
+			
+			</label>
+		
+		    <div class="padding-top">
+		      <button ng-click="salvarPerfil()" class="button button-block button-positive"/>Gravar</button> 
+		    </div>
+
+		</div>
+    </ion-content>
+
 </ion-view>

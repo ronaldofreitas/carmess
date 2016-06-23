@@ -12,18 +12,30 @@ $stateProvider
 
   .state('app.home2', {
     url: '/home2/:id',
+    cache:false,
     views: {
       'menuContent': {
         templateUrl: 'views/home.html',
-        controller: 'homeController'
+        controller: 'homeCtrl'
       }
     }
   })  
   .state('app.perfil', {
     url: '/perfil',
+    cache:false,
     views: {
       'menuContent': {
         templateUrl: 'views/perfil.html'
+      }
+    }
+  })   
+  .state('app.denunciar', {
+    url: '/denunciar/:id',
+    cache:false,
+    views: {
+      'menuContent': {
+        templateUrl: 'views/denunciar.html',
+        controller: 'denunciarCtrl'
       }
     }
   })  
