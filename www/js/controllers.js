@@ -1,7 +1,9 @@
 angular.module('controllers', [])
 
-.controller('homeCtrl', function($scope,$rootScope,$window,$location,$ionicLoading) {
+.controller('homeCtrl', function($scope,$rootScope,$window,$location,$http,$ionicLoading) {
 
+  $scope.profilefoto='';
+  $scope.listPlacas=[]
 
   $scope.toggleLeft = function() {
     $ionicSideMenuDelegate.toggleLeft();
@@ -21,12 +23,9 @@ angular.module('controllers', [])
 
   }else{
 
-    
-
       $scope.placa={input1:'',input2:''}
       $scope.profilefoto=$window.localStorage['avatar'];
       $rootScope.iduser=$window.localStorage['id'];
-
 
       $scope.validateCode = function($event,tp){
         if(tp == 1){// campo 1 apenas texto e 3 caracteres
@@ -38,83 +37,53 @@ angular.module('controllers', [])
             $event.returnValue = false;
           }
         }
-      }
+      } 
 
       $scope.placa = [];
-
+ 
 
       $scope.enviadados = function(){
-
+ 
         $ionicLoading.show();
 
+        if(typeof $scope.placa.input1 == 'undefined' || typeof $scope.placa.input2 == 'undefined'){
+          alert('Preencha a placa corretamente.');
+          $ionicLoading.hide();
+          return false;
+        } 
+
+        if($scope.placa.input1.length < 3 || $scope.placa.input2.length < 4){
+          alert('Preencha a placa corretamente.');
+          $ionicLoading.hide();
+          return false;
+        }
 
         var placaref = $scope.placa.input1.toUpperCase()+''+$scope.placa.input2;
         var placa    = (placaref.length == 7) ? placaref : null;
 
-        console.log(placa);
-
         if(placa != null){
 
-          $scope.bebe = [{tut:'aga',jfj:4545}];
-
-        $scope.buscando = firebase.database().ref('placas/'+placa).on("value", function(snapshot) {
-
-          console.log(snapshot);
-     
-          snapshot.forEach(function(childSnapshot) {
-
-            console.log(childSnapshot.val());
-            
-            
-            
-            console.log('bubu');
-
-            setTimeout(function(){
-              $location.path("/app/sobre");
-            }, 800);
-
-            //var key = childSnapshot.key();
-            //var childData = childSnapshot.val();
-
+          objetoplaca = {
+            'placa':$scope.placa.input1.toUpperCase()+''+$scope.placa.input2,
+            'tp':4}
+          var res = $http({
+              method: 'POST',
+              url: 'http://localhost/carmess/api/',
+              data: objetoplaca, 
+              headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+          })
+          res.success(function(data, status, headers, config) {
+            if(data == 'false'){
+              $ionicLoading.hide();
+              alert('Nenhum resultado encontrado.');              
+            }else{
+              $scope.listPlacas=[{carro:data.carro,id:data.id,avatar:data.avatar}]
+              $ionicLoading.hide();
+            }
           });
-        });
 
-
-       // $location.path("/app/sobre");
-
-
-        /*
-          console.log('ok');
-
-          firebase.database().ref('placas/'+placa).once("value", function(snapshot) {
-          
-            console.log(snapshot);
-            console.log('ok-sim');
-
-            snapshot.forEach(function(childSnapshot) {
-
-              console.log(childSnapshot.val());
-
-              //var key = childSnapshot.key();
-              //var childData = childSnapshot.val();
-
-            });
-          });
-          */
         }
 
-
-        setTimeout(function(){$ionicLoading.hide();}, 100);
-
-        if($scope.placa.input1.length < 3 || $scope.placa.input2.length < 4){
-          //alert('bote a porra diretchu rapá');
-          //return false;
-        }
-
-
-        /*
-          consulta pra ver se placa existe e segue para chat
-        */
       }
 
     
@@ -122,7 +91,7 @@ angular.module('controllers', [])
 
 })
 
-.controller('perfilCont', function($scope,$window,$location,$state) {
+.controller('perfilCont', function($scope,$window,$location,$http) {
 
   $scope.perfil={
     nome:$window.localStorage.nome,
@@ -134,8 +103,6 @@ angular.module('controllers', [])
     placa1:$window.localStorage.placa1,
     placa2:$window.localStorage.placa2
   }
-  console.log($scope.perfil);
-  console.log($window.localStorage);
 
   $scope.validateCode = function($event,tp){
     if(tp == 1){// campo 1 apenas texto e 3 caracteres
@@ -180,25 +147,27 @@ angular.module('controllers', [])
       return false;
     }
 
-    var placaset='';
-    placaset = $window.localStorage.placa1+''+$window.localStorage.placa2;
-    console.log('placas/'+placaset);
-
-    // antes de fazer update na placa, remove a atual, evitando que um mesmo usuario tenha varias placas
-    firebase.database().ref('placas/'+placaset).remove();
-
-
-    // atualiza placa 
-    setTimeout(function(){       
-      firebase.database().ref('placas/'+placaset).update({
-        _id:parseInt($window.localStorage.id)
+      objetoplaca = {
+        'id_user':$window.localStorage.id,
+        'placa':$scope.perfil.placa1.toUpperCase()+''+$scope.perfil.placa2,
+        'carro':$scope.perfil.modelo+' '+$scope.perfil.marca,
+        'avatar':$window.localStorage.avatar,
+        'tp':3}
+      var res = $http({
+          method: 'POST',
+          url: 'http://localhost/carmess/api/',
+          data: objetoplaca, 
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      })
+      res.success(function(data, status, headers, config) {
+        console.log(data);
+        if(data == 'false'){
+          alert('Essa placa já está registrada.');
+        }
       });
-    }, 500);
 
     $window.localStorage['placa1'] = $scope.perfil.placa1.toUpperCase();
     $window.localStorage['placa2'] = $scope.perfil.placa2;
-
-    placaset = $window.localStorage.placa1+''+$window.localStorage.placa2;
 
     alert('Gravado com sucesso.');
 

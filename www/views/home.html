@@ -45,17 +45,18 @@
 
         <div class="row">
           <div class="col">
-
-            <ion-list>
-                <ion-item ng-repeat="placa in placas">
-                    <img ng-src="{{item.location}}" style="width: 100%;">
-                </ion-item>
-            </ion-list>
-
-            <div ng-repeat="lar in bebe">
-              {{lar}}
-
-            </div>
+            
+           <ion-item ng-repeat="placa in listPlacas">
+           <a href="#/app/chat/{{placa.id}}/{{placa.carro}}" style="text-decoration:none;color:#666;">
+              <div class="item-icon-left">
+                  <img ng-if="placa.avatar" style="float:left" class='fotocircular' src='{{placa.avatar}}' height='30' >
+                  <p>{{placa.carro}}</p>
+              </div>
+              <div class="item-icon-right">
+                  <i class="icon ion-ios-arrow-right"></i>
+              </div>
+          </a>
+          </ion-item>
 
           </div>
         </div>

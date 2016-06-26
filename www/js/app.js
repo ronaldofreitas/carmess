@@ -59,7 +59,7 @@ $stateProvider
     }
   })  
   .state('app.chat', {
-    url: '/chat',
+    url: '/chat/:iduser/:carro',
     views: {
       'menuContent': {
         templateUrl: 'views/chat.html',
