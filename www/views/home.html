@@ -15,27 +15,26 @@
 
     <ion-content has-header="true" padding="true" class="conteudohome">
 
-      <div ng-if="validapesquisa">
         <div class="row row-center">
           <div class="col col-center">
           <h3>  Digite a placa </h3>
           </div>
         </div>
-        <div class="row">
 
+        <div class="row">
           <div class="col">
             <label class="item item-input inputselecut placasddf">
-              <input autofocus="" class="inputplaca inpal1" ng-keypress="validateCode($event,1)" ng-trim="false" type="text" ng-model="placa.input1" maxlength="3" min="3" max="3" style="text-align: right;font-size:40px;text-transform:uppercase;">
+              <input autofocus="" class="inputplaca inpal1" placeholder="ABC" ng-keypress="validateCode($event,1)" ng-trim="false" type="text" ng-model="placa.input1" maxlength="3" min="3" max="3" style="text-align: right;font-size:40px;text-transform:uppercase;">
             </label>
           </div>        
 
           <div class="col">
             <label class="item item-input inputselecut placasddf">
-              <input class="inputplaca inpal2" ng-keypress="validateCode($event,2)" ng-trim="false" type="text" ng-model="placa.input2" maxlength="4" min="4" max="4" style="text-align: left;font-size:40px;text-transform:uppercase;">
+              <input class="inputplaca inpal2" placeholder="1234" ng-keypress="validateCode($event,2)" ng-trim="false" type="text" ng-model="placa.input2" maxlength="4" min="4" max="4" style="text-align: left;font-size:40px;text-transform:uppercase;">
             </label>
           </div>
+        </div>
 
-        </div>    
         <div class="row">
           <div class="col">
             <button id="submitnput" ng-click="enviadados()" class="button button-block button-positive">
@@ -43,17 +42,23 @@
             </button>
           </div>
         </div>
-      </div>
 
-      <div ng-if="!validapesquisa">
-        <div class="row row-center">
-          <div class="col col-center">
-            <h3>
-              Existem dados pendentes em seu perfil. No menu <i class="ion-navicon-round"></i> acesse Perfil e verifique.
-            </h3>
+        <div class="row">
+          <div class="col">
+
+            <ion-list>
+                <ion-item ng-repeat="placa in placas">
+                    <img ng-src="{{item.location}}" style="width: 100%;">
+                </ion-item>
+            </ion-list>
+
+            <div ng-repeat="lar in bebe">
+              {{lar}}
+
+            </div>
+
           </div>
         </div>
-      </div>
 
     </ion-content>
 

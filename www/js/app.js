@@ -12,7 +12,7 @@ $stateProvider
 
   .state('app.home2', {
     url: '/home2/:id',
-    cache:false,
+    cache:true,
     views: {
       'menuContent': {
         templateUrl: 'views/home.html',

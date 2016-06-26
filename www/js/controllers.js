@@ -2,34 +2,30 @@ angular.module('controllers', [])
 
 .controller('homeCtrl', function($scope,$rootScope,$window,$location,$ionicLoading) {
 
-  $ionicLoading.show();
-  $scope.validapesquisa=true;
+
+  $scope.toggleLeft = function() {
+    $ionicSideMenuDelegate.toggleLeft();
+  };
+
   if(
+    !$window.localStorage.nome || 
     !$window.localStorage.placa1 || 
     !$window.localStorage.placa2 || 
     !$window.localStorage.marca || 
     !$window.localStorage.modelo || 
     !$window.localStorage.cor){
     //alert('Existem dados pendentes em seu perfil.');
-    $scope.validapesquisa=false;
-    //$location.path("/app/perfil/"+$window.localStorage['id']);
 
-    setTimeout(function(){
-      $ionicLoading.hide();
-    }, 1000);
+    //$location.path("/app/perfil/"+$window.localStorage['id']);
+    $location.path("/app/perfil");
+
   }else{
 
-    setTimeout(function(){
-
-      $ionicLoading.hide();
+    
 
       $scope.placa={input1:'',input2:''}
       $scope.profilefoto=$window.localStorage['avatar'];
       $rootScope.iduser=$window.localStorage['id'];
-
-      $scope.toggleLeft = function() {
-        $ionicSideMenuDelegate.toggleLeft();
-      };
 
 
       $scope.validateCode = function($event,tp){
@@ -44,26 +40,89 @@ angular.module('controllers', [])
         }
       }
 
+      $scope.placa = [];
+
 
       $scope.enviadados = function(){
 
-        console.log($scope.placa.input1.length);
+        $ionicLoading.show();
+
+
+        var placaref = $scope.placa.input1.toUpperCase()+''+$scope.placa.input2;
+        var placa    = (placaref.length == 7) ? placaref : null;
+
+        console.log(placa);
+
+        if(placa != null){
+
+          $scope.bebe = [{tut:'aga',jfj:4545}];
+
+        $scope.buscando = firebase.database().ref('placas/'+placa).on("value", function(snapshot) {
+
+          console.log(snapshot);
+     
+          snapshot.forEach(function(childSnapshot) {
+
+            console.log(childSnapshot.val());
+            
+            
+            
+            console.log('bubu');
+
+            setTimeout(function(){
+              $location.path("/app/sobre");
+            }, 800);
+
+            //var key = childSnapshot.key();
+            //var childData = childSnapshot.val();
+
+          });
+        });
+
+
+       // $location.path("/app/sobre");
+
+
+        /*
+          console.log('ok');
+
+          firebase.database().ref('placas/'+placa).once("value", function(snapshot) {
+          
+            console.log(snapshot);
+            console.log('ok-sim');
+
+            snapshot.forEach(function(childSnapshot) {
+
+              console.log(childSnapshot.val());
+
+              //var key = childSnapshot.key();
+              //var childData = childSnapshot.val();
+
+            });
+          });
+          */
+        }
+
+
+        setTimeout(function(){$ionicLoading.hide();}, 100);
 
         if($scope.placa.input1.length < 3 || $scope.placa.input2.length < 4){
-          alert('bote a porra diretchu rapá');
-          return false;
+          //alert('bote a porra diretchu rapá');
+          //return false;
         }
+
+
         /*
           consulta pra ver se placa existe e segue para chat
         */
       }
 
-    }, 1000);
+    
  }
 
 })
 
-.controller('perfilCont', function($scope,$window) {
+.controller('perfilCont', function($scope,$window,$location,$state) {
 
   $scope.perfil={
     nome:$window.localStorage.nome,
@@ -75,6 +134,8 @@ angular.module('controllers', [])
     placa1:$window.localStorage.placa1,
     placa2:$window.localStorage.placa2
   }
+  console.log($scope.perfil);
+  console.log($window.localStorage);
 
   $scope.validateCode = function($event,tp){
     if(tp == 1){// campo 1 apenas texto e 3 caracteres
@@ -108,28 +169,40 @@ angular.module('controllers', [])
       return false;
     }   
 
-    var placaset = $window.localStorage.placa1+''+$window.localStorage.placa2;
+
+    if(
+      !$window.localStorage.nome || 
+      !$window.localStorage.marca || 
+      !$window.localStorage.modelo || 
+      !$window.localStorage.cor){
+
+      alert('Todos os campos são obrigatórios');
+      return false;
+    }
+
+    var placaset='';
+    placaset = $window.localStorage.placa1+''+$window.localStorage.placa2;
     console.log('placas/'+placaset);
+
     // antes de fazer update na placa, remove a atual, evitando que um mesmo usuario tenha varias placas
     firebase.database().ref('placas/'+placaset).remove();
 
-    setTimeout(function(){
-    // atualiza placa    
+
+    // atualiza placa 
+    setTimeout(function(){       
       firebase.database().ref('placas/'+placaset).update({
         _id:parseInt($window.localStorage.id)
       });
     }, 500);
 
-
-
-    $window.localStorage['placa1'] = '';
-    $window.localStorage['placa2'] = '';
-
     $window.localStorage['placa1'] = $scope.perfil.placa1.toUpperCase();
     $window.localStorage['placa2'] = $scope.perfil.placa2;
 
-    //alert('Gravado com sucesso.');
+    placaset = $window.localStorage.placa1+''+$window.localStorage.placa2;
 
+    alert('Gravado com sucesso.');
+
+    //$location.path("/app/home2/"+$window.localStorage['id']);
   };
 
 })

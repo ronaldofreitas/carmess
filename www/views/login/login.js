@@ -34,8 +34,8 @@ angular.module('App')
             $window.localStorage['modelo'] = snapshot.val().modelo;
             $window.localStorage['cor']    = snapshot.val().cor;
             $window.localStorage['placa']  = snapshot.val().placa;
-            $window.localStorage['placa1'] = '';
-            $window.localStorage['placa2'] = '';
+            //$window.localStorage['placa1'] = '';
+            //$window.localStorage['placa2'] = '';
 
           });
           $location.path("/app/home2/"+data[0].id);

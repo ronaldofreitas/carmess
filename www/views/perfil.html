@@ -1,4 +1,4 @@
-<ion-view view-title="Perfil" hide-back-button="true" ng-controller="perfilCont">
+<ion-view view-title="Perfil" hide-back-button="false" ng-controller="perfilCont">
 
     <ion-nav-bar class="bar-positive">
 	  <ion-nav-buttons side="left">
@@ -43,7 +43,10 @@
 		
 		    <div class="padding-top">
 		      <button ng-click="salvarPerfil()" class="button button-block button-positive"/>Gravar</button> 
-		    </div>
+		    </div>		    
+		    <center class="padding-top">
+		      <span>Todos os campos são obrigatórios</span>
+		    </center>
 
 		</div>
     </ion-content>
