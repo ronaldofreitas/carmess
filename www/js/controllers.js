@@ -40,7 +40,7 @@ angular.module('controllers', [])
       } 
 
       $scope.placa = [];
- 
+  
 
       $scope.enviadados = function(){
  
@@ -64,6 +64,7 @@ angular.module('controllers', [])
         if(placa != null){
 
           objetoplaca = {
+            'id':$window.localStorage.id,
             'placa':$scope.placa.input1.toUpperCase()+''+$scope.placa.input2,
             'tp':4}
           var res = $http({
@@ -75,9 +76,10 @@ angular.module('controllers', [])
           res.success(function(data, status, headers, config) {
             if(data == 'false'){
               $ionicLoading.hide();
+              $scope.listPlacas=[]
               alert('Nenhum resultado encontrado.');              
             }else{
-              $scope.listPlacas=[{carro:data.carro,id:data.id,avatar:data.avatar}]
+              $scope.listPlacas=[{carro:data.carro, id:data.id_user, avatar:data.avatar}]
               $ionicLoading.hide();
             }
           });
@@ -176,17 +178,76 @@ angular.module('controllers', [])
 
 })
 
-.controller('ChatCont', function($scope,$ionicScrollDelegate) {
-  $scope.data={message:''}
+.controller('ChatCont', function($scope,$stateParams,$ionicScrollDelegate,$window) {
 
+  //$scope.data={message:''}
+
+  $scope.meuid=$window.localStorage.id;
+  $scope.carro='meu id é '+$window.localStorage.id;
+  //$scope.carro=$stateParams.carro;
   $scope.nomeusuario='ronaldo'
   $scope.messages=[]
 
+
+  var commentsRef = firebase.database().ref('conversas/'+parseInt($stateParams.iduser)+'-'+parseInt($scope.meuid));
+  
+
+commentsRef.once("value", function(snapshot) {
+  var data = snapshot.val();
+  console.log('a');
+  $scope.messages.push({
+    data:data.data,
+    id_origem:data.id_origem,
+    texto:data.mensagem
+  });
+
+  console.log($scope.messages);
+
+});
+
+
+commentsRef.on("child_added", function(snapshot) {
+  var data = snapshot.val();
+  console.log('b');
+  $scope.messages.push({
+    data:data.data,
+    id_origem:data.id_origem,
+    texto:data.mensagem
+  });
+
+  console.log($scope.messages);
+
+});
+
+
+
+setTimeout(function(){ 
+  $ionicScrollDelegate.scrollBottom(true);
+}, 1000);
+
   $scope.sendMessage=function(){
-    $scope.messages.push({texto:$scope.data.message});
-    $scope.data={message:''}
+
+    //$scope.messages.push({texto:$scope.data.message});
+    //$scope.data={message:''}
     $ionicScrollDelegate.scrollBottom(true);
+
+
+    firebase.database().ref('conversas/'+parseInt($stateParams.iduser)+'-'+parseInt($scope.meuid)).push({
+      id_origem:$window.localStorage.id,
+      data:new Date().getTime(),
+      mensagem:$scope.data.message
+    });
+
+    firebase.database().ref('conversas/'+parseInt($scope.meuid)+'-'+parseInt($stateParams.iduser)).push({
+      id_origem:$window.localStorage.id,
+      data:new Date().getTime(),
+      mensagem:$scope.data.message
+    });
+
+    $scope.data={message:''}
+
   }
+
   
 })
 .controller('ListaCont', function($scope,Scopes,$location,$ionicLoading) {

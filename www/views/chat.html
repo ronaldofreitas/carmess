@@ -1,4 +1,4 @@
-<ion-view hide-back-button="false" title='Sandero vermelho' style="bakcground-color:#f70;">
+<ion-view hide-back-button="false" title='{{carro}}' style="bakcground-color:#f70;">
 
 <ion-nav-bar class="bar-positive">
   <ion-nav-back-button class="button-clear">
@@ -8,16 +8,18 @@
 
 <ion-content>
 
-
+ 
    <div scroll-item ng-repeat="message in messages" >  
 
     <div class="commentArea" >
 
-      <div class="bubbledRight">
-          {{message.texto}}
+
+      <div ng-if="meuid != message.id_origem" class="bubbledRight">
+      <span>{{nomeusuario}}</span><br/>
+         {{message.texto}}
       </div>
 
-      <div class="bubbledLeft">
+      <div ng-if="meuid == message.id_origem" class="bubbledLeft">
       <span>{{nomeusuario}}</span><br/>
          {{message.texto}}
       </div>

@@ -7,7 +7,10 @@
 .medium {
     font-size: 30px;
 }
-
+.item {
+    border-color: #ddd;
+    background-color: #efeaea;
+  }
 .placasddf{
   background-color: #ccc;
   text-align: right;
@@ -147,12 +150,12 @@ border: 0px;
     -o-border-radius: 8px 8px 8px 0px;
     -ms-border-radius: 8px 8px 8px 0px;
     border-radius: 8px 8px 8px 0px;
-    background-color: #65B045;
+    background-color: #335692;
     color: #ffffff;
 }
 
 .bubbledLeft:before {
-    border-bottom: 10px solid #65B045;
+    border-bottom: 10px solid #335692;
     border-left: 9px solid rgba(0, 0, 0, 0);
     position: absolute;
     bottom: 0;
