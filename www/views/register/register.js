@@ -1,5 +1,5 @@
 angular.module('App')
-.controller('registerController', function ($scope,$state,$ionicHistory,$location,$window,$http, Utils) {
+.controller('registerController', function ($scope,$state,$ionicHistory,$location,$window,$http, Utils,URL_API) {
 //.controller('registerController', function ($scope) {
 
 
@@ -14,7 +14,7 @@ angular.module('App')
       myobject = {'email':user.email,'senha':user.password,'tp':2}
       var res = $http({
           method: 'POST',
-          url: 'http://localhost/carmess/api/',
+          url: URL_API,
           data: myobject, 
           headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })
@@ -61,6 +61,7 @@ angular.module('App')
 
       });
       res.error(function(data, status, headers, config) {
+        console.log('error');
         //alert( "failure message: " + JSON.stringify({data: data}));
         console.log(data);
         console.log(status);

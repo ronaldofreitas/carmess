@@ -1,6 +1,6 @@
 angular.module('controllers', [])
 
-.controller('homeCtrl', function($scope,$rootScope,$window,$location,$http,$ionicLoading) {
+.controller('homeCtrl', function($scope,$rootScope,$window,$location,$http,$ionicLoading,URL_API) {
 
   $scope.profilefoto='';
   $scope.listPlacas=[]
@@ -69,11 +69,14 @@ angular.module('controllers', [])
             'tp':4}
           var res = $http({
               method: 'POST',
-              url: 'http://localhost/carmess/api/',
+              url: URL_API,
               data: objetoplaca, 
               headers: {'Content-Type': 'application/x-www-form-urlencoded'}
           })
           res.success(function(data, status, headers, config) {
+            
+            console.log(data);
+
             if(data == 'false'){
               $ionicLoading.hide();
               $scope.listPlacas=[]
@@ -93,7 +96,7 @@ angular.module('controllers', [])
 
 })
 
-.controller('perfilCont', function($scope,$window,$location,$http) {
+.controller('perfilCont', function($scope,$window,$location,$http,URL_API) {
 
   $scope.perfil={
     nome:$window.localStorage.nome,
@@ -157,7 +160,7 @@ angular.module('controllers', [])
         'tp':3}
       var res = $http({
           method: 'POST',
-          url: 'http://localhost/carmess/api/',
+          url: URL_API,
           data: objetoplaca, 
           headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })
@@ -173,83 +176,91 @@ angular.module('controllers', [])
 
     alert('Gravado com sucesso.');
 
-    //$location.path("/app/home2/"+$window.localStorage['id']);
   };
 
 })
+
+
+
+
+  
 
 .controller('ChatCont', function($scope,$stateParams,$ionicScrollDelegate,$window) {
 
   //$scope.data={message:''}
 
   $scope.meuid=$window.localStorage.id;
-  $scope.carro='meu id é '+$window.localStorage.id;
-  //$scope.carro=$stateParams.carro;
-  $scope.nomeusuario='ronaldo'
+  $scope.carro=$stateParams.carro;
+  $scope.nomeusuario=$window.localStorage.nome
   $scope.messages=[]
 
 
-  var commentsRef = firebase.database().ref('conversas/'+parseInt($stateParams.iduser)+'-'+parseInt($scope.meuid));
+  var commentsRef = firebase.database().ref('conversas/'+parseInt($scope.meuid)+'-'+parseInt($stateParams.iduser));
+
+  commentsRef.on("child_added", function(snapshot) {
+    var data = snapshot.val();
+
+    $scope.messages.push({
+      data:data.data,
+      id_origem:data.id_origem,
+      texto:data.mensagem
+    });
+
+    if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+        $scope.$apply();
+    }
+
+
+  });
+
   
 
-commentsRef.once("value", function(snapshot) {
-  var data = snapshot.val();
-  console.log('a');
-  $scope.messages.push({
-    data:data.data,
-    id_origem:data.id_origem,
-    texto:data.mensagem
-  });
-
-  console.log($scope.messages);
-
-});
+  setTimeout(function(){
+   // document.getElementById('teste').select();
+    $ionicScrollDelegate.scrollBottom(true);
+    //$ionicLoading.hide();
+  }, 1500);
 
 
-commentsRef.on("child_added", function(snapshot) {
-  var data = snapshot.val();
-  console.log('b');
-  $scope.messages.push({
-    data:data.data,
-    id_origem:data.id_origem,
-    texto:data.mensagem
-  });
-
-  console.log($scope.messages);
-
-});
-
-
-
-setTimeout(function(){ 
-  $ionicScrollDelegate.scrollBottom(true);
-}, 1000);
 
   $scope.sendMessage=function(){
 
-    //$scope.messages.push({texto:$scope.data.message});
-    //$scope.data={message:''}
+    var msg = document.getElementById('mensagem').value;
+
+    // go to bottom
     $ionicScrollDelegate.scrollBottom(true);
 
-
+    // escreve no chat do outro usuário
     firebase.database().ref('conversas/'+parseInt($stateParams.iduser)+'-'+parseInt($scope.meuid)).push({
       id_origem:$window.localStorage.id,
       data:new Date().getTime(),
-      mensagem:$scope.data.message
+      mensagem:msg
     });
 
+    // replica para você
     firebase.database().ref('conversas/'+parseInt($scope.meuid)+'-'+parseInt($stateParams.iduser)).push({
       id_origem:$window.localStorage.id,
       data:new Date().getTime(),
-      mensagem:$scope.data.message
+      mensagem:msg
+    });    
+
+    // 
+    firebase.database().ref('notification_reg/'+parseInt($stateParams.iduser)).update({
+      id_from:$scope.meuid,
+      data:new Date().getTime(),
+      mensagem:msg,
+      carro:$scope.carro
     });
 
-    $scope.data={message:''}
+    document.getElementById('mensagem').value='';
+    //$scope.data={message:''}
 
   }
 
-  
 })
+
+
+
 .controller('ListaCont', function($scope,Scopes,$location,$ionicLoading) {
 
   $scope.placa=''
@@ -258,13 +269,9 @@ setTimeout(function(){
    if(typeof Scopes.get().HomeCont == 'undefined'){
       $location.path("/home");
    }else{
-
-
       $scope.placa = Scopes.get().HomeCont.input1
       setTimeout(function(){ $ionicLoading.hide(); $scope.mostra=true; }, 1000);
-      
    }
-
    $scope.chatgo = function(){
     $location.path("/app/chat");
    }

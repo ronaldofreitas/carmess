@@ -1,6 +1,10 @@
 angular.module('App')
-.controller('loginController', function ($scope,$window,$location,$http,$ionicLoading) {
+.controller('loginController', function ($scope,$window,$location,$http,$ionicLoading,URL_API) {
 //.controller('loginController', function ($scope, $state,$cordovaOauth, $localStorage, $location,$http,$ionicPopup, $firebaseObject, Auth, FURL, Utils) {
+
+  if($window.localStorage.id){
+    //$location.path("/app/home2/"+$window.localStorage.id);
+  }
 
   $scope.signIn = function(user){
 
@@ -18,7 +22,7 @@ angular.module('App')
       myobject = {'email':user.email,'senha':user.password,'tp':1}
       var res = $http({
           method: 'POST',
-          url: 'http://localhost/carmess/api/',
+          url: URL_API,
           data: myobject, 
           headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })

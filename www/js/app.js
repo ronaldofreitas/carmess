@@ -60,6 +60,7 @@ $stateProvider
   })  
   .state('app.chat', {
     url: '/chat/:iduser/:carro',
+    cache:true,
     views: {
       'menuContent': {
         templateUrl: 'views/chat.html',
@@ -90,11 +91,13 @@ $stateProvider
       controller:'homeController'
     })
     ;
-$urlRouterProvider.otherwise("/login");
+  $urlRouterProvider.otherwise("/login");
+
 })
 
-//.constant('FURL', 'https://asfirebase.firebaseio.com/')
-.run(function($ionicPlatform) {
+.constant('URL_API','http://192.168.0.3/carmess/api/') 
+
+.run(function($ionicPlatform,$location,$cordovaLocalNotification,$rootScope,$window,$cordovaVibration) {
   $ionicPlatform.ready(function() {
 
     if(window.cordova && window.cordova.plugins.Keyboard) {
@@ -103,6 +106,106 @@ $urlRouterProvider.otherwise("/login");
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
+
+    document.addEventListener("pause", onPause, false);
+    document.addEventListener("resume", onResume, false);
+
+    var supdasdd = firebase.database().ref('notification_reg/');
+   // var supdasdd = firebase.database().ref('notification_reg/'+$window.localStorage.id);
+    var onValueChange;
+
+    function onPause() {
+
+      onValueChange = supdasdd.on("child_changed", function(snapshot) {
+        var changedPost = snapshot.val();
+        snapshot.val();
+            $cordovaLocalNotification.add({
+                id: changedPost.id_from,
+                date: '"'+changedPost.data+'"',
+                message: changedPost.mensagem,
+                title: changedPost.carro,
+                autoCancel: true,
+                sound: null,
+                icon:      'carro',
+                smallIcon: 'carro_small',
+            }).then(function () {
+             
+            });
+
+        $cordovaVibration.vibrate(100);
+        setTimeout(function () { 
+          $cordovaVibration.vibrate(300); 
+          setTimeout(function () { $cordovaVibration.vibrate(500); }, 300);
+        }, 400);
+
+      });
+
+    }
+
+
+    function onResume() {
+      supdasdd.off('child_changed', onValueChange);
+    }
+
+    document.addEventListener('deviceready', function() {
+
+    });
+
+/*
+    document.addEventListener('deviceready', function () {
+
+        cordova.plugins.backgroundMode.configure({
+            silent: true
+        });
+
+        //cordova.plugins.backgroundMode.setDefaults({ text:'xxxxDoing heavy tasks.'});
+
+        cordova.plugins.backgroundMode.enable();
+
+        // Called when background mode has been activated
+        cordova.plugins.backgroundMode.onactivate = function () {
+            setTimeout(function () {
+
+              console.log('entrou');
+
+                var supdasdd = firebase.database().ref('notification_reg/');
+                //var supdasdd = firebase.database().ref('notification_reg/'+parseInt($window.localStorage.id));
+
+                supdasdd.on("child_changed", function(snapshot) {
+
+                });
+
+                supdasdd.on("value", function(snapshot) {
+                  $cordovaLocalNotification.add({
+                      id: "1",
+                      date: '2016-02-10',
+                      message:'olaaa',
+                      title: "mudou",
+                      autoCancel: true,
+                      sound: null, 
+                  }).then(function () {
+                   
+                  });
+                });
+
+                supdasdd.on("child_added", function(snapshot) {
+                  console.log('child_addedxx');
+                });
+
+            }, 5000);
+        }
+    }, false);
+
+*/
+
+
+
+    $rootScope.$on("$cordovaLocalNotification:click", function(notification, state) {
+        $location.path("/app/chat/"+state.id+"/"+state.title);
+    });
+
+
+
   });
 })
 

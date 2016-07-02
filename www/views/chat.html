@@ -6,29 +6,25 @@
   </ion-nav-back-button>
 </ion-nav-bar>
 
-<ion-content>
+<ion-content> 
 
- 
-   <div scroll-item ng-repeat="message in messages" >  
+  <div scroll-item ng-repeat="message in messages" >
 
     <div class="commentArea" >
 
-
       <div ng-if="meuid != message.id_origem" class="bubbledRight">
-      <span>{{nomeusuario}}</span><br/>
+        <span>{{carro}}</span><br/>
          {{message.texto}}
       </div>
 
       <div ng-if="meuid == message.id_origem" class="bubbledLeft">
-      <span>{{nomeusuario}}</span><br/>
+        <span>Você</span><br/>
          {{message.texto}}
       </div>
 
-    </div>    
-
-
     </div>
- 
+  </div>
+
 </ion-content>
 
 
@@ -36,7 +32,8 @@
 
 <ion-footer-bar keyboard-attach class="bar-stable item-input-inset">
   <label class="item-input-wrapper">
-    <input type="text" placeholder="Envie sua mensagem" on-return="sendMessage(); closeKeyboard()" class="inputchat" ng-model="data.message" />
+    <input id="mensagem" type="text" placeholder="Envie sua mensagem" class="inputchat"  />
+    <!--<input id="mensagem" type="text" placeholder="Envie sua mensagem" on-return="sendMessage(); closeKeyboard()" class="inputchat"  />-->
    </label>
   <button class="button" ng-click="sendMessage()">
     Enviar
