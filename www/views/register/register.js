@@ -47,7 +47,7 @@ angular.module('App')
           $window.localStorage['nome'] = '';
           $window.localStorage['avatar'] = avatarper;
           //$window.localStorage['email'] = user.email;
-          $window.localStorage['id'] = iduser;
+          $window.localStorage['id'] = parseInt(iduser);
           $window.localStorage['nome'] = '';
           $window.localStorage['marca'] = '';
           $window.localStorage['modelo'] = '';
@@ -55,7 +55,8 @@ angular.module('App')
           $window.localStorage['placa1'] = '';
           $window.localStorage['placa2'] = '';
 
-          $location.path('/app/perfil');
+          //$location.path('/app/perfil');
+          $location.path("/app/home2/"+parseInt(iduser));
 
         }
 

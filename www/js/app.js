@@ -107,30 +107,66 @@ $stateProvider
       StatusBar.styleDefault();
     }
 
+
+    // se ele já se cadastrou vai ter o $window.localStorage.id
+   if($window.localStorage.id){
+
+
+/*
     document.addEventListener("pause", onPause, false);
     document.addEventListener("resume", onResume, false);
 
-    var supdasdd = firebase.database().ref('notification_reg/');
-   // var supdasdd = firebase.database().ref('notification_reg/'+$window.localStorage.id);
+   // var supdasdd = firebase.database().ref('notification_reg/');
+    var supdasdd = firebase.database().ref('notification_reg/'+parseInt($window.localStorage.id));
     var onValueChange;
+
+
 
     function onPause() {
 
-      onValueChange = supdasdd.on("child_changed", function(snapshot) {
+
+      console.log('pausado');
+      $cordovaVibration.vibrate(100);
+
+      setInterval(function(){ 
+        now = new Date;
+        hora =  now.getHours();
+        min =  now.getMinutes();
+        seg =  now.getMilliseconds();
+        console.log(
+         hora + ":" + min + ":" + now.getSeconds() + ":" + seg 
+        ); 
+      }, 30000);
+
+      var arraspd=[];
+      var tdp=0;
+      onValueChange = supdasdd.on("child_changed", function(snapshot, prevChildKey) {
         var changedPost = snapshot.val();
-        snapshot.val();
-            $cordovaLocalNotification.add({
-                id: changedPost.id_from,
-                date: '"'+changedPost.data+'"',
-                message: changedPost.mensagem,
-                title: changedPost.carro,
-                autoCancel: true,
-                sound: null,
-                icon:      'carro',
-                smallIcon: 'carro_small',
-            }).then(function () {
-             
-            });
+          arraspd[tdp]=changedPost;
+          tdp++;
+
+            if(tdp == 4){
+
+              var stng_id = arraspd[2];
+              var stng_carro = arraspd[0];
+              var idres = stng_id.split("@");
+              var carrores = stng_carro.split("@");
+
+              $cordovaLocalNotification.add({
+                  id: idres[0],
+                  date: '"'+arraspd[1]+'"',
+                  message: arraspd[3],
+                  title: carrores[0],
+                  autoCancel: true,
+                  sound: null,
+                  icon:      'carro',
+                  smallIcon: 'carro_small',
+              }).then(function () {
+               
+              });
+
+            }
+
 
         $cordovaVibration.vibrate(100);
         setTimeout(function () { 
@@ -140,73 +176,98 @@ $stateProvider
 
       });
 
-    }
+
+
+    } // end onPause
 
 
     function onResume() {
+      console.log('resumido');
       supdasdd.off('child_changed', onValueChange);
     }
+*/
+  
 
-    document.addEventListener('deviceready', function() {
 
-    });
 
-/*
+    var arraspd=[];
+    var tdp=0;
+    
+   // var supdasdd = firebase.database().ref('notification_reg/');
+    var supdasdd = firebase.database().ref('notification_reg/'+parseInt($window.localStorage.id));
+    var onValueChange;
+
     document.addEventListener('deviceready', function () {
 
-        cordova.plugins.backgroundMode.configure({
-            silent: true
-        });
-
+        //cordova.plugins.backgroundMode.configure({            silent: true        });
         //cordova.plugins.backgroundMode.setDefaults({ text:'xxxxDoing heavy tasks.'});
-
         cordova.plugins.backgroundMode.enable();
 
-        // Called when background mode has been activated
         cordova.plugins.backgroundMode.onactivate = function () {
             setTimeout(function () {
+              onValueChange = supdasdd.on("child_changed", function(snapshot, prevChildKey) {
+              //onValueChange = supdasdd.on("child_changed", function(snapshot) {
+                var changedPost = snapshot.val();
+                
+                arraspd[tdp]=changedPost;
+                tdp++;
 
-              console.log('entrou');
+                  if(tdp == 4){
 
-                var supdasdd = firebase.database().ref('notification_reg/');
-                //var supdasdd = firebase.database().ref('notification_reg/'+parseInt($window.localStorage.id));
+                    var stng_id = arraspd[2];
+                    var stng_carro = arraspd[0];
+                    var idres = stng_id.split("@");
+                    var carrores = stng_carro.split("@");
 
-                supdasdd.on("child_changed", function(snapshot) {
+                    $cordovaLocalNotification.add({
+                        id: idres[0],
+                        date: '"'+arraspd[1]+'"',
+                        message: arraspd[3],
+                        title: carrores[0],
+                        autoCancel: true,
+                        sound: null,
+                        icon:      'carro',
+                        smallIcon: 'carro_small',
+                    }).then(function () {
+                     
+                    });
 
-                });
+                    setTimeout(function () {
+                      window.plugins.NativeAudio.preloadComplex('notificacao', 'sons/som.mp3', 1, 1, 0, function(msg) {
+                        //console.log('msg: ' + msg); // Loaded
+                      }, function(msg) {
+                        //console.log('error: ' + msg); // Loading error
+                      });
 
-                supdasdd.on("value", function(snapshot) {
-                  $cordovaLocalNotification.add({
-                      id: "1",
-                      date: '2016-02-10',
-                      message:'olaaa',
-                      title: "mudou",
-                      autoCancel: true,
-                      sound: null, 
-                  }).then(function () {
-                   
-                  });
-                });
+                      window.plugins.NativeAudio.play('notificacao');
+                      $cordovaVibration.vibrate(250);
+                    }, 500);
 
-                supdasdd.on("child_added", function(snapshot) {
-                  console.log('child_addedxx');
-                });
+                  }
+
+              });
 
             }, 5000);
         }
+
+      cordova.plugins.backgroundMode.ondeactivate = function() {
+        supdasdd.off('child_changed', onValueChange);
+      };
+
+
     }, false);
-
-*/
-
-
 
     $rootScope.$on("$cordovaLocalNotification:click", function(notification, state) {
         $location.path("/app/chat/"+state.id+"/"+state.title);
     });
+    
 
+
+  }// if $window.localStorage.id
 
 
   });
+
 })
 
 .controller('AppCtrl', function($scope) {

@@ -9,23 +9,31 @@ angular.module('controllers', [])
     $ionicSideMenuDelegate.toggleLeft();
   };
 
-  if(
+ /* if(
     !$window.localStorage.nome || 
     !$window.localStorage.placa1 || 
     !$window.localStorage.placa2 || 
     !$window.localStorage.marca || 
     !$window.localStorage.modelo || 
     !$window.localStorage.cor){
-    //alert('Existem dados pendentes em seu perfil.');
-
-    //$location.path("/app/perfil/"+$window.localStorage['id']);
+    
     $location.path("/app/perfil");
+  */
+ // }else{
 
-  }else{
+      //$scope.placa={input1:'',input2:''}
 
-      $scope.placa={input1:'',input2:''}
-      $scope.profilefoto=$window.localStorage['avatar'];
-      $rootScope.iduser=$window.localStorage['id'];
+      if($window.localStorage.avatar){
+        $scope.profilefoto=$window.localStorage.avatar;
+      }else{
+        $scope.profilefoto='';
+      } 
+
+      if($window.localStorage.id){
+        $rootScope.iduser=$window.localStorage.id;
+      }else{
+        $rootScope.iduser='';
+      }
 
       $scope.validateCode = function($event,tp){
         if(tp == 1){// campo 1 apenas texto e 3 caracteres
@@ -39,33 +47,49 @@ angular.module('controllers', [])
         }
       } 
 
-      $scope.placa = [];
+      //$scope.placa = [];
   
 
       $scope.enviadados = function(){
  
         $ionicLoading.show();
 
-        if(typeof $scope.placa.input1 == 'undefined' || typeof $scope.placa.input2 == 'undefined'){
+        if(
+          !$window.localStorage.nome || 
+          !$window.localStorage.placa || 
+          !$window.localStorage.marca || 
+          !$window.localStorage.modelo || 
+          !$window.localStorage.cor){
+
+          $ionicLoading.hide();
+          alert('Precisa preencher seus dados no Perfil.');
+          return false;
+        }
+          
+        $scope.placa1 = document.getElementById('placa1').value;
+        $scope.placa2 = document.getElementById('placa2').value;
+
+  
+        if($scope.placa1 == '' || typeof $scope.placa2 == ''){
           alert('Preencha a placa corretamente.');
           $ionicLoading.hide();
           return false;
-        } 
+        }      
 
-        if($scope.placa.input1.length < 3 || $scope.placa.input2.length < 4){
+        if($scope.placa1.length < 3 || $scope.placa2.length < 4){
           alert('Preencha a placa corretamente.');
           $ionicLoading.hide();
           return false;
         }
 
-        var placaref = $scope.placa.input1.toUpperCase()+''+$scope.placa.input2;
+        var placaref = $scope.placa1.toUpperCase()+''+$scope.placa2;
         var placa    = (placaref.length == 7) ? placaref : null;
 
         if(placa != null){
 
           objetoplaca = {
             'id':$window.localStorage.id,
-            'placa':$scope.placa.input1.toUpperCase()+''+$scope.placa.input2,
+            'placa':$scope.placa1.toUpperCase()+''+$scope.placa2,
             'tp':4}
           var res = $http({
               method: 'POST',
@@ -74,9 +98,6 @@ angular.module('controllers', [])
               headers: {'Content-Type': 'application/x-www-form-urlencoded'}
           })
           res.success(function(data, status, headers, config) {
-            
-            console.log(data);
-
             if(data == 'false'){
               $ionicLoading.hide();
               $scope.listPlacas=[]
@@ -85,18 +106,28 @@ angular.module('controllers', [])
               $scope.listPlacas=[{carro:data.carro, id:data.id_user, avatar:data.avatar}]
               $ionicLoading.hide();
             }
+          })
+          res.error(function(data, status, headers, config) {
+            alert('Nenhum resultado encontrado.'); 
+            $ionicLoading.hide();
+            return false;
           });
 
+        }else{
+          alert('Preencha a placa corretamente.');
+          $ionicLoading.hide();
+          return false;
         }
 
       }
 
     
- }
+ //} // end else
 
 })
 
 .controller('perfilCont', function($scope,$window,$location,$http,URL_API) {
+
 
   $scope.perfil={
     nome:$window.localStorage.nome,
@@ -105,8 +136,8 @@ angular.module('controllers', [])
     marca:$window.localStorage.marca,
     modelo:$window.localStorage.modelo,
     cor:$window.localStorage.cor,
-    placa1:$window.localStorage.placa1,
-    placa2:$window.localStorage.placa2
+    placa1:$window.localStorage.placa.substr(0, 3),
+    placa2:$window.localStorage.placa.substr(3, 7)
   }
 
   $scope.validateCode = function($event,tp){
@@ -243,19 +274,46 @@ angular.module('controllers', [])
       data:new Date().getTime(),
       mensagem:msg
     });    
-
+    var tm = new Date().getTime();
     // 
     firebase.database().ref('notification_reg/'+parseInt($stateParams.iduser)).update({
-      id_from:$scope.meuid,
+      id_from:$scope.meuid+'@'+tm,
       data:new Date().getTime(),
       mensagem:msg,
-      carro:$scope.carro
+      carro:$scope.carro+'@'+tm
     });
 
     document.getElementById('mensagem').value='';
     //$scope.data={message:''}
 
   }
+
+     /* setInterval(function(){ 
+
+        var msg = 'bulachão' + new Date().getTime()
+
+        firebase.database().ref('conversas/'+parseInt($stateParams.iduser)+'-'+parseInt($scope.meuid)).push({
+          id_origem:$window.localStorage.id,
+          data:new Date().getTime(),
+          mensagem:msg
+        });
+
+        // replica para você
+        firebase.database().ref('conversas/'+parseInt($scope.meuid)+'-'+parseInt($stateParams.iduser)).push({
+          id_origem:$window.localStorage.id,
+          data:new Date().getTime(),
+          mensagem:msg
+        });    
+        var tm = new Date().getTime();
+        // 
+        firebase.database().ref('notification_reg/'+parseInt($stateParams.iduser)).update({
+          id_from:$scope.meuid+'@'+tm,
+          data:new Date().getTime(),
+          mensagem:msg,
+          carro:$scope.carro+'@'+tm
+        });
+
+      }, 30000);*/
 
 })
 

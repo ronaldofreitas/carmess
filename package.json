@@ -21,7 +21,9 @@
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
-    "de.appplant.cordova.plugin.local-notification"
+    "de.appplant.cordova.plugin.local-notification",
+    "de.appplant.cordova.plugin.background-mode",
+    "de.appplant.cordova.plugin.background-mode@0.6.4"
   ],
   "cordovaPlatforms": [
     "android"

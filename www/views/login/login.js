@@ -3,7 +3,7 @@ angular.module('App')
 //.controller('loginController', function ($scope, $state,$cordovaOauth, $localStorage, $location,$http,$ionicPopup, $firebaseObject, Auth, FURL, Utils) {
 
   if($window.localStorage.id){
-    //$location.path("/app/home2/"+$window.localStorage.id);
+    $location.path("/app/home2/"+parseInt($window.localStorage.id));
   }
 
   $scope.signIn = function(user){
